@@ -1,0 +1,27 @@
+canvas {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%
+}
+
+body {
+	background: #000000;
+	overflow: hidden
+
+}
+
+.overlay {
+	position: absolute;
+	width:100%;
+	background-color: rgba(38, 45, 62, 0.9);
+	z-index: 10;
+}
+
+.overlay a, .overlay a:visited {
+	color: #ffffff;
+}
+
+.overlay ul {
+	list-style: none;
+}
