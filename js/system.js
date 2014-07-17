@@ -1,7 +1,6 @@
 var waitLoadTextures = 0;
 var waitLoadModels = 0;
 
-var clock = new THREE.Clock();
 var scene = new THREE.Scene();
 var jsonLoader = new THREE.JSONLoader();
 var camera = createCamera();
@@ -12,10 +11,6 @@ var skyBox = createSkyBox();
 var earthMesh = createEarth();
 //var cloudMesh = createEarthClouds(earthMesh);
 
-var effect = createEffect();
-var oculusControl = createOculusControls();
-oculusControl.connect();
-
 var ships = [];
 waitLoadModels++;
 
@@ -25,16 +20,6 @@ moveToEarth();
 moveToSideEarth();
 
 var globalLookAt = scene.position;
-
-function createEffect() {
-	var effect = new THREE.OculusRiftEffect( renderer, { worldScale: 1 } );
-	effect.setSize( window.innerWidth, window.innerHeight );
-	return effect;
-}
-
-function createOculusControls() {
-	return new THREE.OculusControls( camera );
-}
 
 var loaded = false;
 function load(){
@@ -53,10 +38,7 @@ function animate() {
 
 	TWEEN.update(+new Date());
 
-	oculusControl.update( clock.getDelta() );
-	effect.render( scene, camera );
-
-	//renderer.render(scene, camera);
+	renderer.render(scene, camera);
 	//renderer.on;
 }
 
@@ -77,8 +59,7 @@ function loadModels(){
 function moveToEarth() {
 	$('#earth').on('click', function(){
 		var target = createVector(0, 0, 0)
-		//moveCamera(target);
-		moveCameraOculus(target);
+		moveCamera(target);
 		moveShips(target);
 	});
 }
@@ -86,26 +67,9 @@ function moveToEarth() {
 function moveToSideEarth() {
 	$('#sideEarth').on('click', function(){
 		var target = createVector(1000, 0, 0)
-		//moveCamera(target);
-		moveCameraOculus(target);
+		moveCamera(target);
 		moveShips(target);
 	});
-}
-
-function moveCameraOculus(target) {
-
-	var currLookAt = cloneVector(globalLookAt);
-	var updatedLookAt = addVector(target, subVector(target, camera.position));
-
-	var move = new TWEEN.Tween(camera.position)
-		.to(target, 6000)
-		.delay(6000)
-		.easing(customEasing)
-		.onComplete(function(){
-			globalLookAt = cloneVector(updatedLookAt);
-		});
-
-	move.start(+new Date());
 }
 
 function moveCamera(target) {
